@@ -1,0 +1,44 @@
+Recursive feature selection 
+
+from sklearn.feature_selection import RFE,RFECV
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split 
+reg = LinearRegression()
+
+refcv = RFECV(estimator=LinearRegression(), cv=5,min_features_to_select=3)
+rfe = RFE(estimator=LinearRegression(), n_features_to_select=4)
+
+rfe.fit(X_to_select,y_to_predict)
+refcv.fit(X_to_select,y_to_predict)
+
+
+recursive_dict = {}
+for features, ranking in zip(rfe.feature_names_in_,rfe.ranking_):
+    recursive_dict[features] = ranking
+
+recursive_df = pd.DataFrame(list(recursive_dict.items()),columns = ['Feature', 'Ranking'])
+
+sort_lowest(recursive_df,'Ranking')
+
+
+recursivecv_dict = {}
+for features, ranking in zip(refcv.feature_names_in_,refcv.ranking_):
+    recursivecv_dict[features] = ranking
+
+recursivecv_df = pd.DataFrame(list(recursivecv_dict.items()),columns = ['Feature', 'Ranking'])
+
+sort_lowest(recursivecv_df,'Ranking')
+
+
+print(refcv.get_feature_names_out(),rfe.get_feature_names_out())
+
+rfe_features = rfe.get_feature_names_out()
+
+xrfe = shooting_df[rfe_features]
+
+
+
+rfeDT = RFE(estimator=DecisionTreeRegressor(), n_features_to_select=4)
+
+rfeDT.fit(X_to_select,y_to_predict)
+rfeDT.get_feature_names_out()
